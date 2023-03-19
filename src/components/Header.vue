@@ -1,6 +1,5 @@
 <template>
-  <Menubar :model="menuItems" />
-  <div></div>
+  <Menubar class="col mb-2" :model="menuItems" />
 </template>
 <script>
 export default {
@@ -8,25 +7,22 @@ export default {
     return {
       menuItems: [
         {
-          label: "Actors",
-          icon: "pi pi-fw pi-home",
-          to: "/tv",
-        },
-        {
-          label: "Movie",
-          icon: "pi pi-fw pi-info-circle",
-        },
-        {
-          label: "Tv",
-          icon: "pi pi-fw pi-phone",
-        },
-        {
           label: "Home",
           icon: "pi pi-fw pi-home",
           to: "/",
+        },
+        {
+          label: "My List",
+          icon: "pi pi-fw pi-list",
+          to: "/mylist",
         },
       ],
     };
   },
 };
 </script>
+<style>
+.col {
+  background-color: #afabb3;
+}
+</style>

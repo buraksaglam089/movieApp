@@ -1,42 +1,30 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Movie from '../views/Movie.vue'
-import Tv from '../views/Tv.vue'
-import Actors from '../views/Actors.vue'
+import MyList from '../views/MyList.vue'
 import Home from '../views/Home.vue'
-import BaseCard from '../components/BaseCard.vue'
+import Details from '../views/Details.vue'
 
 
 const routes = [ 
-  {
   
-    path: '/movies',
-    name: 'Movie',
-    component: Movie,
-
-  },
+ 
   {
     path: '/',
     name: 'Home',
     component: Home,
-    children: [
-      {
-        path: 'home/:id',
-        name:'BaseCard',
-        component:BaseCard
-      }]
+    
     
   },
   {
-    path: '/tv',
-    name: 'TV',
-    component: Tv
+    path: '/movies/:id',
+    name: 'Details',
+    component: Details,
   },
   {
-    path: '/actors',
-    name: 'Actors',
-    component: Actors
-
-  }
+    path: '/mylist',
+    name: 'MyList',
+    component: MyList
+  },
+  
 
 ] 
   const router = createRouter({

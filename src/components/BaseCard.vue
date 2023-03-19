@@ -1,27 +1,29 @@
 <template>
-  <div class="grid">
-    <Card style="width: 25em">
+  <div class="grid" @click="goDetails">
+    <Card class="m-2 bg-white-alpha-10" style="width: 25em">
       <template #header>
         <img
           alt="user header"
           :src="`https://image.tmdb.org/t/p/w500/${this.movie.poster_path}`"
         />
       </template>
-      <template #title> {{ this.movie.title }} </template>
+
+      <template #title>
+        <div class="h-3rem">
+          {{ this.movie.title }}
+        </div>
+      </template>
+
       <template #subtitle
         >{{ this.movie.vote_average }}<i class="pi pi-star-fill ml-1"></i>
       </template>
+
       <template #content>
-        <p>
-          {{ movie.overview }}
-        </p>
-      </template>
-      <template #footer>
-        <button class="bg-primary">
-          <router-link :to="{ name: 'BaseCard', params: { id: id } }"
-            >Details</router-link
-          >
-        </button>
+        <div class="h-3rem">
+          <p class="text-overflow-example">
+            {{ movie.overview }}
+          </p>
+        </div>
       </template>
     </Card>
   </div>
@@ -49,5 +51,21 @@ export default {
       id: this.movie.id,
     };
   },
+  methods: {
+    goDetails() {
+      this.$router.push({ name: "Details", params: { id: this.id } });
+    },
+  },
 };
 </script>
+<style>
+.text-overflow-example {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px; /* Metnin sığdırılacağı genişlik */
+}
+.overflow-example {
+  overflow: auto; /* Metnin taşması durumunda kaydırma çubuklarını göster */
+}
+</style>

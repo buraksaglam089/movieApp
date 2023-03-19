@@ -3,8 +3,8 @@
     <span class="p-input-icon-left">
       <i class="pi pi-search" />
       <InputText v-model="value" placeholder="Search" />
-      <Button class="bg-teal-500" @click="searchMovie">Search</Button>
-      <Button class="bg-teal-500" @click="backMovie">reset</Button>
+      <Button class="bg-teal-500 ml-2" @click="searchMovie">Search</Button>
+      <Button class="bg-teal-500 ml-2" @click="backMovie">Reset</Button>
     </span>
   </div>
 
@@ -30,6 +30,7 @@ export default {
       value: "",
       datas: [],
       movies: [],
+      genres: [],
     };
   },
   methods: {
@@ -45,21 +46,18 @@ export default {
     },
   },
 
-  mounted() {
-    fetch(
-      "https://api.themoviedb.org/3/movie/popular?api_key=23f55821cea8e8f99e2bb901f57e9d1f"
-    )
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        this.datas = data;
-        this.movies = data.results;
-        console.log(this.movies);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  async mounted() {
+    try {
+      const response = await fetch(
+        `https://api.themoviedb.org/3/movie/popular?api_key=23f55821cea8e8f99e2bb901f57e9d1f`
+      );
+      const data = await response.json();
+      this.datas = data;
+      this.movies = data.results;
+    } catch (error) {
+      console.error(error);
+    }
   },
 };
 </script>
+<style></style>
