@@ -1,62 +1,93 @@
 <template>
-  <div class="card flex flex-wrap justify-content-center gap-3">
-    <span class="p-input-icon-left">
+  <div class="card flex flex-wrap justify-content-between gap-1">
+    <span class="p-input-icon-left mb-8">
       <i class="pi pi-search" />
       <InputText v-model="value" placeholder="Search" />
+
       <Button class="bg-teal-500 ml-2" @click="searchMovie">Search</Button>
       <Button class="bg-teal-500 ml-2" @click="backMovie">Reset</Button>
     </span>
+    <div class="mb-4">
+      <Paginator
+        v-model:first="currentPage"
+        :rows="10"
+        :totalRecords="150"
+        @page="getMovie"
+        :rowsPerPageOptions="false"
+      ></Paginator>
+    </div>
+  </div>
+  <div v-if="showResult" class="flex justify-content-center">
+    <h1>NO RESULTS FOUND</h1>
   </div>
 
   <div class="grid mt-2">
     <div class="col-4" v-for="movie in movies" :key="movie">
       <BaseCard :movie="movie" />
     </div>
+    <div class="card"></div>
   </div>
 </template>
 <script>
 import BaseCard from "../components/BaseCard.vue";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
+import Paginator from "primevue/paginator";
 export default {
   components: {
     BaseCard,
     Button,
     InputText,
+    Paginator,
   },
 
   data() {
     return {
       value: "",
-      datas: [],
+      movieData: [],
       movies: [],
-      genres: [],
+      showResult: false,
+      currentPage: null,
     };
   },
   methods: {
     searchMovie() {
-      if (this.datas.results.length > 0) {
-        this.movies = this.datas.results.filter((movie) => {
+      if (this.movieData.results.length > 0) {
+        this.movies = this.movieData.results.filter((movie) => {
           return movie.title.toLowerCase().includes(this.value.toLowerCase());
         });
       }
+      if (this.movies.length === 0) {
+        this.showResult = true;
+      } else {
+        this.showResult = false;
+      }
     },
     backMovie() {
-      this.movies = this.datas.results;
+      this.movies = this.movieData.results;
+      this.showResult = false;
+    },
+
+    async getMovie() {
+      try {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/popular?api_key=${
+            import.meta.env.VITE_API_KEY
+          }&page=${this.currentPage + 1} `
+        );
+
+        const data = await response.json();
+
+        this.movieData = data;
+        this.movies = data.results;
+      } catch (error) {
+        console.error(error);
+      }
     },
   },
 
-  async mounted() {
-    try {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/movie/popular?api_key=23f55821cea8e8f99e2bb901f57e9d1f`
-      );
-      const data = await response.json();
-      this.datas = data;
-      this.movies = data.results;
-    } catch (error) {
-      console.error(error);
-    }
+  mounted() {
+    this.getMovie();
   },
 };
 </script>

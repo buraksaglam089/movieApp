@@ -2,7 +2,7 @@
   <h1>BOOKMARK</h1>
   <div class="grid overflow-example">
     <div class="col-4" v-for="movie in myMovies" :key="movie">
-      <Card style="width: 25em">
+      <Card style="width: 25em" @click="goDetails(movie.id)">
         <template #header>
           <img
             alt="user header"
@@ -22,7 +22,6 @@
             </p>
           </div>
         </template>
-        <template #footer> </template>
       </Card>
     </div>
   </div>
@@ -30,19 +29,27 @@
 <script>
 import { movieStore } from "../store/store";
 import Card from "primevue/card";
+import { mapState } from "pinia";
 export default {
   components: {
     Card,
   },
   data() {
-    return {
-      myMovies: movieStore().myMovies,
-    };
+    return {};
+  },
+  methods: {
+    goDetails(id) {
+      this.$router.push({ name: "Details", params: { id: id } });
+    },
+  },
+
+  computed: {
+    ...mapState(movieStore, ["myMovies"]),
   },
 };
 </script>
 <style>
-.saga-kaydir {
+.shift-right {
   float: left;
   padding: 0 0 10px 10px;
 }
@@ -52,6 +59,6 @@ export default {
   min-height: 400px;
 }
 .overflow-example {
-  overflow: auto; /* Metnin taşması durumunda kaydırma çubuklarını göster */
+  overflow: auto;
 }
 </style>

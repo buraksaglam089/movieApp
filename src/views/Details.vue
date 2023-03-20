@@ -2,7 +2,7 @@
   <div>
     <h1 class="flex justify-content-center header">
       {{ currentMovie.original_title
-      }}<Button @click="addMovie" class="ml-2"
+      }}<Button @click="onAddMovie" class="ml-2"
         ><i class="pi pi-bookmark-fill"></i
       ></Button>
     </h1>
@@ -10,7 +10,7 @@
     <img
       alt="user header"
       :src="`https://image.tmdb.org/t/p/w500/${this.currentMovie.poster_path}`"
-      class="saga-kaydir mr-2"
+      class="shift-right mr-2"
     />
 
     <div>
@@ -35,7 +35,7 @@
           </template>
           <p class="m-0">
             <span
-              >{{ this.currentMovie.popularity }} people watched this movie
+              >{{ currentMovie.popularity }} people watched this movie
             </span>
           </p>
         </Fieldset>
@@ -77,7 +77,7 @@
           <p class="m-0">
             <span
               ><div v-for="genre in currentMovie.genres" :key="genre">
-                <span>{{ genre.name }}</span>
+                <Chip>{{ genre.name }}</Chip>
               </div>
             </span>
           </p>
@@ -92,18 +92,20 @@ import Rating from "primevue/rating";
 import { movieStore } from "../store/store";
 import Button from "primevue/button";
 import { mapActions } from "pinia";
+import { mapState } from "pinia";
+import Chip from "primevue/chip";
 
 export default {
   components: {
     Fieldset,
     Rating,
     Button,
+    Chip,
   },
   data() {
     return {
       currentId: this.$route.params.id,
       currentMovie: {},
-      stars: movieStore(),
       star: 0,
       roundenNumber: 0,
       movieGenre: [],
@@ -112,33 +114,41 @@ export default {
   methods: {
     ...mapActions(movieStore, ["addMovie"]),
     getStar() {
-      this.star = this.currentMovie.vote_average;
-      this.star = this.star / 2;
+      this.star = Math.ceil(this.currentMovie.vote_average / 2);
     },
-    addMovie() {
-      this.stars.addMovie(this.currentMovie);
+    onAddMovie() {
+      this.addMovie(this.currentMovie);
     },
     addGenre() {
       this.movieGenre.push(this.currentMovie.genres);
     },
+    async getMovie() {
+      try {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/${
+            this.$route.params.id
+          }?api_key=${import.meta.env.VITE_API_KEY}`
+        );
+        const data = await response.json();
+        this.currentMovie = data;
+        this.star = Math.ceil(this.currentMovie.vote_average / 2);
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
-  async mounted() {
-    try {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/movie/${this.$route.params.id}?api_key=23f55821cea8e8f99e2bb901f57e9d1f`
-      );
-      const data = await response.json();
-      this.currentMovie = data;
-    } catch (error) {
-      console.error(error);
-    }
+  mounted() {
     this.getStar();
     this.addGenre();
+    this.getMovie();
+  },
+  computed: {
+    ...mapState(movieStore, ["myMovies"]),
   },
 };
 </script>
 <style>
-.saga-kaydir {
+.shift-right {
   float: left;
   padding: 0 0 10px 10px;
 }

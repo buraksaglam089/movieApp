@@ -2,14 +2,16 @@
   <div class="grid" @click="goDetails">
     <Card class="m-2 bg-white-alpha-10" style="width: 25em">
       <template #header>
-        <img
-          alt="user header"
-          :src="`https://image.tmdb.org/t/p/w500/${this.movie.poster_path}`"
-        />
+        <div>
+          <img
+            alt="user header"
+            :src="`https://image.tmdb.org/t/p/w500/${this.movie.poster_path}`"
+          />
+        </div>
       </template>
 
       <template #title>
-        <div class="h-3rem">
+        <div class="h-5rem">
           {{ this.movie.title }}
         </div>
       </template>
