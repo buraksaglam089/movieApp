@@ -1,13 +1,14 @@
 <template>
   <div class="card flex flex-wrap justify-content-between gap-1">
-    <span class="p-input-icon-left mb-8">
-      <i class="pi pi-search" />
-      <InputText v-model="value" placeholder="Search" />
-
+    <div class="flex align-item-center">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search" />
+        <InputText v-model="value" placeholder="Search" class="h-full" />
+      </span>
       <Button class="bg-teal-500 ml-2" @click="searchMovie">Search</Button>
       <Button class="bg-teal-500 ml-2" @click="backMovie">Reset</Button>
-    </span>
-    <div class="mb-4">
+    </div>
+    <div>
       <Paginator
         v-model:first="currentPage"
         :rows="10"
@@ -22,10 +23,9 @@
   </div>
 
   <div class="grid mt-2">
-    <div class="col-4" v-for="movie in movies" :key="movie">
+    <div class="col-12 md:col-6 lg:col-3" v-for="movie in movies" :key="movie">
       <BaseCard :movie="movie" />
     </div>
-    <div class="card"></div>
   </div>
 </template>
 <script>

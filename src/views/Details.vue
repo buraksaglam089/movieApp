@@ -74,13 +74,14 @@
               <span class="font-bold text-lg"> Genres</span>
             </div>
           </template>
-          <p class="m-0">
-            <span
-              ><div v-for="genre in currentMovie.genres" :key="genre">
-                <Chip>{{ genre.name }}</Chip>
-              </div>
-            </span>
-          </p>
+          <div class="flex gap-1">
+            <Chip
+              v-for="genre in currentMovie.genres"
+              :key="genre"
+              class="p-2"
+              >{{ genre.name }}</Chip
+            >
+          </div>
         </Fieldset>
       </div>
     </div>

@@ -6,7 +6,9 @@ export const movieStore = defineStore("movieStore", {
   },
   actions: {
     addMovie(movie) {
-      if (!this.myMovies.some((m) => m.id === movie.id)) {
+      const isUniqMovie = this.myMovies.some((m) => m.id === movie.id);
+
+      if (!isUniqMovie) {
         this.myMovies.push(movie);
       }
     },
